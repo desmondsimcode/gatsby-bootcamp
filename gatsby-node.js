@@ -31,6 +31,7 @@ module.exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
+
   //2:43:00
 
   res.data.allMarkdownRemark.edges.forEach(edge => {
@@ -39,6 +40,29 @@ module.exports.createPages = async ({ graphql, actions }) => {
       path: `/blog/${edge.node.fields.slug}`,
       context: {
         slug: edge.node.fields.slug,
+      },
+    })
+  })
+
+  const blog1Template = path.resolve("./src/templates/blog1.js")
+  const res1 = await graphql(`
+    query {
+      allContentfulBlogPost {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  res1.data.allContentfulBlogPost.edges.forEach(edge => {
+    createPage({
+      component: blog1Template,
+      path: `/blog/${edge.node.slug}`,
+      context: {
+        slug: edge.node.slug,
       },
     })
   })
